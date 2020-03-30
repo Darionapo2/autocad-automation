@@ -60,50 +60,49 @@ class SpotsBlock:
 
             generate_rectangle(rectangle_insert_point, rectangle_width, rectangle_height)
 
-    def add_transponders(self, distance_from_spots_border = 50, mode = 'bottom'):
-        if self.double:
-            if mode == 'bottom':
-                x = self.bottom_left_point.x + (self.width / 2)
-                y = self.bottom_left_point.y + distance_from_spots_border
-                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
-            elif mode == 'top':
-                x = self.bottom_left_point.x + (self.width / 2)
-                y = self.bottom_left_point.y + (2 * self.height) + self.border - distance_from_spots_border
-                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
-            elif mode == 'both':
-                x = self.bottom_left_point.x + (self.width / 2)
-                y = self.bottom_left_point.y + distance_from_spots_border
-                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+    def add_transponders(self, internal_distance_from_spots_border = 50, external_distance_from_spots_border = 140, mode = 'bottom'):
 
-                x = self.bottom_left_point.x + (self.width / 2)
-                y = self.bottom_left_point.y + (2 * self.height) + self.border - distance_from_spots_border
-                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
-            else:
-                # The mode value is invalid
-                # TODO: handle this error.
-                pass
+        x = self.bottom_left_point.x + (self.width / 2)
+        layers_number = 2 if self.double else 1
+
+        def bottom_mode():
+            y = self.bottom_left_point.y + \
+                internal_distance_from_spots_border
+
+            TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+
+            y = self.bottom_left_point.y - \
+                external_distance_from_spots_border
+
+            TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+
+        def top_mode():
+            offset_factor = (layers_number * self.height) + \
+                            self.border
+
+            y = self.bottom_left_point.y + \
+                offset_factor - \
+                internal_distance_from_spots_border
+
+            TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+
+            y = self.bottom_left_point.y + \
+                offset_factor + \
+                external_distance_from_spots_border
+
+            TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+
+        if mode == 'bottom':
+            bottom_mode()
+        elif mode == 'top':
+            top_mode()
+        elif mode == 'both':
+            bottom_mode()
+            top_mode()
         else:
-
-            if mode == 'bottom':
-                x = self.bottom_left_point.x + (self.width / 2)
-                y = self.bottom_left_point.y + distance_from_spots_border
-                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
-            elif mode == 'top':
-                x = self.bottom_left_point.x + (self.width / 2)
-                y = self.bottom_left_point.y + self.height - distance_from_spots_border
-                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
-            elif mode == 'both':
-                x = self.bottom_left_point.x + (self.width / 2)
-                y = self.bottom_left_point.y + distance_from_spots_border
-                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
-
-                x = self.bottom_left_point.x + (self.width / 2)
-                y = self.bottom_left_point.y + self.height - distance_from_spots_border
-                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
-            else:
-                # The mode value is invalid
-                # TODO: handle this error.
-                pass
+            # The mode value is invalid
+            # TODO: handle this error.
+            pass
 
 class TranspondersBlock:
 
@@ -146,10 +145,10 @@ class Transponder:
 
 def main():
     insert_point1 = APoint(0, 0)
-    spots_block1 = SpotsBlock(100, 500, 15, double = False, border = 10, outline = True)
+    spots_block1 = SpotsBlock(140, 900, 100, double = True, border = 10, outline = True)
     spots_block1.draw(insert_point1)
 
-    spots_block1.add_transponders(distance_from_spots_border = 100, mode = 'both')
+    spots_block1.add_transponders(mode = 'both')
 
 if __name__ == '__main__':
     main()
