@@ -19,6 +19,11 @@ def generate_single_spots_block(insert_point, width, height, spots_number, borde
         else:
             generate_spot(APoint(insert_point.x + ((width + border) * n), insert_point.y), width, height)
 
+spots_block_generated = []
+
+def save_spots_blocks(spots_block_generated):
+    pass # TODO: track all the spots blocks generated and save them into a csv file.
+
 class SpotsBlock:
 
     bottom_left_point: APoint
@@ -30,6 +35,8 @@ class SpotsBlock:
         self.double = double
         self.border = border
         self.outline = outline
+
+        # TODO: register into the save_spots_blocks all the instances of this class.
 
     def draw(self, insert_point):
 
@@ -53,16 +60,69 @@ class SpotsBlock:
 
             generate_rectangle(rectangle_insert_point, rectangle_width, rectangle_height)
 
-    def add_transponders(self):
-        for n in range(self.spots_number):
-            x = self.bottom_left_point.x + (self.width / 2) + ((self.width + self.border) * n)
-            y = self.bottom_left_point.y + 50
+    def add_transponders(self, distance_from_spots_border = 50, mode = 'bottom'):
+        if self.double:
+            if mode == 'bottom':
+                x = self.bottom_left_point.x + (self.width / 2)
+                y = self.bottom_left_point.y + distance_from_spots_border
+                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+            elif mode == 'top':
+                x = self.bottom_left_point.x + (self.width / 2)
+                y = self.bottom_left_point.y + (2 * self.height) + self.border - distance_from_spots_border
+                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+            elif mode == 'both':
+                x = self.bottom_left_point.x + (self.width / 2)
+                y = self.bottom_left_point.y + distance_from_spots_border
+                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+
+                x = self.bottom_left_point.x + (self.width / 2)
+                y = self.bottom_left_point.y + (2 * self.height) + self.border - distance_from_spots_border
+                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+            else:
+                # The mode value is invalid
+                # TODO: handle this error.
+                pass
+        else:
+
+            if mode == 'bottom':
+                x = self.bottom_left_point.x + (self.width / 2)
+                y = self.bottom_left_point.y + distance_from_spots_border
+                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+            elif mode == 'top':
+                x = self.bottom_left_point.x + (self.width / 2)
+                y = self.bottom_left_point.y + self.height - distance_from_spots_border
+                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+            elif mode == 'both':
+                x = self.bottom_left_point.x + (self.width / 2)
+                y = self.bottom_left_point.y + distance_from_spots_border
+                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+
+                x = self.bottom_left_point.x + (self.width / 2)
+                y = self.bottom_left_point.y + self.height - distance_from_spots_border
+                TranspondersBlock(self.spots_number, self.width + self.border).draw(APoint(x, y))
+            else:
+                # The mode value is invalid
+                # TODO: handle this error.
+                pass
+
+class TranspondersBlock:
+
+    first_transponder_center_point: APoint
+
+    def __init__(self, transponders_number, distance):
+        self.transponders_number = transponders_number
+        self.distance = distance
+
+    def draw(self, insert_point):
+
+        self.first_transponder_center_point = insert_point
+
+        for n in range(self.transponders_number):
+            x = self.first_transponder_center_point.x + (self.distance * n)
+            y = self.first_transponder_center_point.y
 
             transponder_insert_point = APoint(x, y)
             Transponder().draw(transponder_insert_point)
-
-class TranspondersBlock:
-    pass # TODO: Sfruttare il sistema di inserimento transponders precedentemente adottato per creare gruppi modulari di Transponders
 
 class Transponder:
     def __init__(self, scale_factor = 36):
@@ -86,20 +146,10 @@ class Transponder:
 
 def main():
     insert_point1 = APoint(0, 0)
-    spots_block1 = SpotsBlock(140, 800, 20, double = True, border = 10, outline = True)
+    spots_block1 = SpotsBlock(100, 500, 15, double = False, border = 10, outline = True)
     spots_block1.draw(insert_point1)
 
-    insert_point2 = APoint(0, 2000)
-    spots_block2 = SpotsBlock(140, 800, 20, double = False, border = 10, outline = True)
-    spots_block2.draw(insert_point2)
-
-    insert_point3 = APoint(0, 4000)
-    spots_block3 = SpotsBlock(140, 800, 20, double = True, outline = False)
-    spots_block3.draw(insert_point3)
-
-    spots_block1.add_transponders()
-    spots_block2.add_transponders()
-    spots_block3.add_transponders()
+    spots_block1.add_transponders(distance_from_spots_border = 100, mode = 'both')
 
 if __name__ == '__main__':
     main()
