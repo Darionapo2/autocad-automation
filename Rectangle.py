@@ -11,8 +11,8 @@ class Rectangle:
         v4 = (insert_point.x, insert_point.y + height)
 
         attributes = {
-            'layer': 'SPOTS',
-            'flags': 1
+            'layer' : 'SPOTS',
+            'flags' : 1
         }
 
         msp.add_polyline2d([v1, v2, v3, v4, v1], dxfattribs = attributes)

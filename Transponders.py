@@ -1,5 +1,5 @@
 from Point import *
-from Global import msp
+from Global import msp, doc
 
 class Transponder:
 
