@@ -11,7 +11,7 @@ class Rectangle:
         v4 = (insert_point.x, insert_point.y + height)
 
         attributes = {
-            'layer' : 'SPOTS',
+            'layer' : 'COLUMNS', # TODO: change back this parameter to 'SPOTS'.
             'flags' : 1
         }
 
