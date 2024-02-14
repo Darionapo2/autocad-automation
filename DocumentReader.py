@@ -1,5 +1,4 @@
 
-
 from Global import msp, doc
 
 class DocumentReader:
