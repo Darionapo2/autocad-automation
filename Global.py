@@ -3,7 +3,7 @@ from ezdxf import *
 from Point import *
 import math
 
-doc = ezdxf.readfile('dxf_test_files/florim_usa_research_and_development.dxf')
+doc = ezdxf.readfile('dxf_test_files/Idrotherm 2000 disposizione aree GPS v11 25-02-2024.dxf')
 msp = doc.modelspace()
 
 def distance(first_point: Point, second_point: Point) -> float:

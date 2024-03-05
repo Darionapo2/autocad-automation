@@ -185,11 +185,16 @@ class Main:
         # CODICE PER CONTARE I PUNTI SU UN DATO LAYER E OTTENERE LE COORDINATE SU UN FILE DI OUTPUT
         all_entities = DocumentReader.get_all_entities()
         polylines = []
-        output_log = 'idrotherm_nuova_tracciatura_13_12_23.csv'
-        with open(output_log, mode = 'w+', encoding = 'utf-8') as outfile:
+        output_log = 'Idrotherm_nuova_tracciatura_19_02_24.csv'
+        with (open(output_log, mode = 'w+', encoding = 'utf-8') as outfile):
 
             for e in all_entities:
-                if e.dxf.layer == 'aree_gps_nuova_tracciatura' or e.dxf.layer == 'WF ingombro stive 2' or e.dxf.layer == 'WF piazzole':
+                if (e.dxf.layer == 'aree_gps_nuova_tracciatura' or
+                    e.dxf.layer == 'WF ingombro stive 2' or
+                    e.dxf.layer == 'WF piazzole' or
+                    e.dxf.layer == 'aree gps 3'):
+
+
                     vertices = list(e.vertices())
                     rounded_vertices = [(math.trunc(x), math.trunc(y)) for x, y in vertices]
                     if (rounded_vertices[-1][0] - 100 < rounded_vertices[0][0] < rounded_vertices[-1][0] + 100) and (rounded_vertices[-1][1] - 100 < rounded_vertices[0][1] < rounded_vertices[-1][1] + 100):
